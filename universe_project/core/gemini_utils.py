@@ -12,7 +12,7 @@ generation_config = {
   "max_output_tokens": 2048,
 }
 
-model = genai.GenerativeModel(model_name="gemini-1.0-pro",
+model = genai.GenerativeModel(model_name="gemini-2.5-flash",
                               generation_config=generation_config)
 
 def generate_content(prompt_text):
