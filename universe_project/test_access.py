@@ -21,7 +21,7 @@ try:
     print("Библиотека сконфигурирована.")
 
 
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     print(f"Модель '{model.model_name}' успешно создана.")
 
 
