@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5>Ваш вопрос:</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">{{ question }}</p>
+    </div>
+</div>
+
+<div class="card mt-4 bg-light">
+    <div class="card-header">
+        <h5>Ответ из глубин космоса:</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text" style="white-space: pre-wrap;">{{ answer }}</p>
+    </div>
+</div>
+
+<a href="{% url 'questions' %}" class="btn btn-secondary mt-3">Задать другой вопрос</a>
+{% endblock %}

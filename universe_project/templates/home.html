@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Добро пожаловать на сайт абсурдных вопросов о Вселенной!</h1>
+<p>Здесь вы можете получить ответы на самые важные вопросы, которые вы даже не решались задать.</p>
+{% if not user.is_authenticated %}
+<p>Пожалуйста, <a href="{% url 'login' %}">войдите</a> или <a href="{% url 'register' %}">зарегистрируйтесь</a>, чтобы начать.</p>
+{% else %}
+<p><a href="{% url 'questions' %}" class="btn btn-primary">Перейти к вопросам</a></p>
+{% endif %}
+{% endblock %}
