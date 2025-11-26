@@ -5,6 +5,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from urllib.parse import unquote # для декодирования URL
 from .gemini_utils import generate_content
+from django.http import JsonResponse
 
 # (здесь позже будет код для Gemini)
 
@@ -23,7 +24,26 @@ def register_view(request):
 def home_view(request):
     return render(request, 'home.html')
 
+@login_required
+def questions_page_view(request):
+    """Просто отображает страницу с анимацией загрузки."""
+    return render(request, 'questions.html')
 
+@login_required
+def get_questions_api(request):
+    """
+    API-эндпоинт: вызывает Gemini, получает вопросы 
+    и возвращает их в формате JSON.
+    """
+    prompt = "Придумай 3 очень странных и абсурдных вопроса о вселенной. Ответь только списком вопросов, без лишних слов. Каждый вопрос на новой строке."
+    generated_text = generate_content(prompt)
+    
+    # Разделяем текст на отдельные вопросы
+    questions_list = [q.strip() for q in generated_text.split('\n') if q.strip()]
+    questions_list = [q.split('. ', 1)[-1] for q in questions_list]
+
+    # Возвращаем данные в формате JSON
+    return JsonResponse({'questions': questions_list})
 
 @login_required
 def questions_view(request):

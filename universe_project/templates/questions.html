@@ -1,18 +1,99 @@
-<!-- templates/questions.html -->
-
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
+<style>
+    /* Те же стили для спиннера, что и раньше */
+    .loader-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+        text-align: center;
+    }
+
+    .spinner {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
 <h2>Выберите вопрос, который не дает вам спать по ночам:</h2>
-<div class="list-group">
-    {% for question in questions %}
-        <!-- ИЗМЕНЕНИЕ ЗДЕСЬ -->
-        <a href="{% url 'answer_loading' %}?q={{ question|urlencode }}" class="list-group-item list-group-item-action">
-            {{ question }}
-        </a>
-    {% empty %}
-        <p>Космос молчит... Не удалось сгенерировать вопросы. Попробуйте обновить страницу.</p>
-    {% endfor %}
+
+<!-- Контейнер для анимации загрузки (виден вначале) -->
+<div id="loader" class="loader-container">
+    <p>Генерируем вселенские дилеммы...</p>
+    <div class="spinner mt-3"></div>
 </div>
+
+<!-- Контейнер для вопросов (изначально пустой и скрыт) -->
+<div id="questions-container" class="list-group" style="display:none;">
+    <!-- Вопросы будут вставлены сюда с помощью JavaScript -->
+</div>
+
+<!-- Контейнер для сообщений об ошибках (изначально скрыт) -->
+<div id="error-container" class="alert alert-danger mt-3" style="display:none;">
+    <!-- Сообщение об ошибке будет вставлено сюда -->
+</div>
+
+
+<script>
+    // Запускаем скрипт, когда вся HTML-структура страницы загружена
+    document.addEventListener('DOMContentLoaded', function() {
+        const loader = document.getElementById('loader');
+        const questionsContainer = document.getElementById('questions-container');
+        const errorContainer = document.getElementById('error-container');
+
+        // URL для страницы-загрузчика ответа (мы будем использовать его для построения ссылок)
+        const baseAnswerUrl = "{% url 'answer_loading' %}";
+
+        // Выполняем асинхронный GET-запрос к нашему API
+        fetch("{% url 'get_questions_api' %}")
+            .then(response => {
+                if (!response.ok) {
+                    // Если сервер ответил ошибкой (например, 500)
+                    throw new Error('Сбой сети или сервера.');
+                }
+                return response.json(); // Преобразуем ответ в JSON
+            })
+            .then(data => {
+                // Прячем анимацию загрузки
+                loader.style.display = 'none';
+                // Показываем контейнер для вопросов
+                questionsContainer.style.display = 'block';
+
+                if (data.questions && data.questions.length > 0) {
+                    // Если пришли вопросы, создаем для каждого ссылку
+                    data.questions.forEach(question => {
+                        const link = document.createElement('a');
+                        link.href = `${baseAnswerUrl}?q=${encodeURIComponent(question)}`;
+                        link.className = 'list-group-item list-group-item-action';
+                        link.textContent = question;
+                        questionsContainer.appendChild(link);
+                    });
+                } else {
+                    // Если пришел пустой список
+                    questionsContainer.innerHTML = '<p>Космос молчит... Не удалось сгенерировать вопросы.</p>';
+                }
+            })
+            .catch(error => {
+                // Если произошла ошибка на любом этапе
+                console.error("Ошибка при получении вопросов:", error);
+                loader.style.display = 'none'; // Прячем загрузчик
+                errorContainer.textContent = 'Произошла ошибка при генерации вопросов. Пожалуйста, попробуйте обновить страницу.';
+                errorContainer.style.display = 'block'; // Показываем блок с ошибкой
+            });
+    });
+</script>
+
 {% endblock %}

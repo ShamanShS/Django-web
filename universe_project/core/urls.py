@@ -7,7 +7,7 @@ urlpatterns = [
     # Наши кастомные страницы
     path('', views.home_view, name='home'),
     path('questions/', views.questions_view, name='questions'),
-
+    path('api/get-questions/', views.get_questions_api, name='get_questions_api'),
     path('answer/loading/', views.answer_loading_view, name='answer_loading'),
     path('answer/', views.answer_view, name='answer'),
 
