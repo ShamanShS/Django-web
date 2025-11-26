@@ -7,6 +7,8 @@ urlpatterns = [
     # Наши кастомные страницы
     path('', views.home_view, name='home'),
     path('questions/', views.questions_view, name='questions'),
+
+    path('answer/loading/', views.answer_loading_view, name='answer_loading'),
     path('answer/', views.answer_view, name='answer'),
 
     # Страницы аутентификации

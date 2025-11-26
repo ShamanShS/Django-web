@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    /* Стили для анимации загрузки */
+    .loader-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+        text-align: center;
+    }
+
+    .spinner {
+        border: 8px solid #f3f3f3; /* Светло-серый фон */
+        border-top: 8px solid #3498db; /* Синий цвет */
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<div class="loader-container">
+    <h2>Получаем мудрость из глубин космоса...</h2>
+    <p>Ваш вопрос: <em>"{{ question }}"</em></p>
+    <div class="spinner mt-3"></div>
+</div>
+
+<script>
+    // Этот скрипт выполнится сразу после загрузки страницы
+    (function() {
+        // Получаем вопрос из контекста Django
+        // Фильтр |escapejs нужен для безопасной вставки строки в JavaScript
+        const question = "{{ question|escapejs }}";
+
+        // Формируем URL для страницы с реальным ответом
+        const answerUrl = "{% url 'answer' %}?q=" + encodeURIComponent(question);
+
+        // Немедленно перенаправляем браузер на этот URL
+        window.location.href = answerUrl;
+    })();
+</script>
+{% endblock %}

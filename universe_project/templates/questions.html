@@ -1,3 +1,5 @@
+<!-- templates/questions.html -->
+
 {% extends 'base.html' %}
 {% load static %}
 
@@ -5,7 +7,8 @@
 <h2>Выберите вопрос, который не дает вам спать по ночам:</h2>
 <div class="list-group">
     {% for question in questions %}
-        <a href="{% url 'answer' %}?q={{ question|urlencode }}" class="list-group-item list-group-item-action">
+        <!-- ИЗМЕНЕНИЕ ЗДЕСЬ -->
+        <a href="{% url 'answer_loading' %}?q={{ question|urlencode }}" class="list-group-item list-group-item-action">
             {{ question }}
         </a>
     {% empty %}

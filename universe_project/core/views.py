@@ -40,6 +40,14 @@ def questions_view(request):
 
     return render(request, 'questions.html', {'questions': questions_list})
 
+@login_required
+def answer_loading_view(request):
+    # Получаем вопрос из GET-параметра, чтобы передать его дальше
+    question = request.GET.get('q', '')
+    # Эта view ничего не вычисляет, просто рендерит шаблон
+    return render(request, 'answer_loading.html', {'question': question})
+
+
 
 @login_required
 def answer_view(request):
