@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-zk5o)@gw913_1^))k974_2-2(2mel+c4b@htpmb%!vedszbay#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['167.234.244.161', 'br00.minescoofcraft.top']
 
 load_dotenv() # Загружаем переменные из .env файла
 
