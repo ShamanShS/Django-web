@@ -16,9 +16,7 @@ model = genai.GenerativeModel(model_name="gemini-2.5-flash",
                               generation_config=generation_config)
 
 def generate_content(prompt_text):
-    """
-    Отправляет промпт в Gemini и возвращает сгенерированный текст.
-    """
+
     try:
         response = model.generate_content(prompt_text)
         return response.text
