@@ -6,6 +6,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 urlpatterns = [
     # Наши кастомные страницы
     path('', views.home_view, name='home'),
+    path('questions/loading/', views.questions_loading_view, name='questions_loading'),
     path('questions/', views.questions_view, name='questions'),
     path('answer/loading/', views.answer_loading_view, name='answer_loading'),
     path('answer/', views.answer_view, name='answer'),
