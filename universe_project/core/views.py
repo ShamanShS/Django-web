@@ -45,20 +45,20 @@ def get_questions_api(request):
     # Возвращаем данные в формате JSON
     return JsonResponse({'questions': questions_list})
 
-@login_required
-def questions_view(request):
-    # Промпт для генерации вопросов
-    prompt = "Придумай 3 очень смешных вопроса о Китайцах. Ответь только списком вопросов, без лишних слов. Каждый вопрос на новой строке."
+# @login_required
+# def questions_view(request):
+#     # Промпт для генерации вопросов
+#     prompt = "Придумай 3 очень смешных вопроса о Китайцах. Ответь только списком вопросов, без лишних слов. Каждый вопрос на новой строке."
     
-    generated_text = generate_content(prompt)
+#     generated_text = generate_content(prompt)
     
-    # Разделяем текст на отдельные вопросы
-    questions_list = [q.strip() for q in generated_text.split('\n') if q.strip()]
+#     # Разделяем текст на отдельные вопросы
+#     questions_list = [q.strip() for q in generated_text.split('\n') if q.strip()]
     
-    # Убираем возможную нумерацию типа "1. "
-    questions_list = [q.split('. ', 1)[-1] for q in questions_list]
+#     # Убираем возможную нумерацию типа "1. "
+#     questions_list = [q.split('. ', 1)[-1] for q in questions_list]
 
-    return render(request, 'questions.html', {'questions': questions_list})
+#     return render(request, 'questions.html', {'questions': questions_list})
 
 @login_required
 def answer_loading_view(request):
