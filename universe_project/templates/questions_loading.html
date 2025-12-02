@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .loader-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+        text-align: center;
+    }
+    .spinner {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1.5s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<div class="loader-container">
+    <h2>Генерируем вселенские дилеммы...</h2>
+    <div class="spinner mt-3"></div>
+</div>
+
+<script>
+    // Немедленно перенаправляем на страницу, где реально генерируются вопросы
+    window.location.href = "{% url 'questions' %}";
+</script>
+{% endblock %}

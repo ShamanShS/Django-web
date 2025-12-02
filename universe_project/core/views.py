@@ -30,35 +30,25 @@ def questions_page_view(request):
     return render(request, 'questions.html')
 
 @login_required
-def get_questions_api(request):
-    """
-    API-эндпоинт: вызывает Gemini, получает вопросы 
-    и возвращает их в формате JSON.
-    """
+def questions_loading_view(request):
+    """Просто отображает страницу-загрузчик для вопросов."""
+    return render(request, 'questions_loading.html')
+
+
+@login_required
+def questions_view(request):
+    # Промпт для генерации вопросов
     prompt = "Придумай 3 очень смешных вопроса о Китайцах. Ответь только списком вопросов, без лишних слов. Каждый вопрос на новой строке."
+    
     generated_text = generate_content(prompt)
     
-
+    # Разделяем текст на отдельные вопросы
     questions_list = [q.strip() for q in generated_text.split('\n') if q.strip()]
+    
+    # Убираем возможную нумерацию типа "1. "
     questions_list = [q.split('. ', 1)[-1] for q in questions_list]
 
-    # Возвращаем данные в формате JSON
-    return JsonResponse({'questions': questions_list})
-
-# @login_required
-# def questions_view(request):
-#     # Промпт для генерации вопросов
-#     prompt = "Придумай 3 очень смешных вопроса о Китайцах. Ответь только списком вопросов, без лишних слов. Каждый вопрос на новой строке."
-    
-#     generated_text = generate_content(prompt)
-    
-#     # Разделяем текст на отдельные вопросы
-#     questions_list = [q.strip() for q in generated_text.split('\n') if q.strip()]
-    
-#     # Убираем возможную нумерацию типа "1. "
-#     questions_list = [q.split('. ', 1)[-1] for q in questions_list]
-
-#     return render(request, 'questions.html', {'questions': questions_list})
+    return render(request, 'questions.html', {'questions': questions_list})
 
 @login_required
 def answer_loading_view(request):
