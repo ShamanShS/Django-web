@@ -1,2 +1,4 @@
 venv
 universe_project/.env
+__pycache__/
+universe_project/db.sqlite3

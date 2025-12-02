@@ -19,5 +19,16 @@
     </div>
 </div>
 
+<div class="mt-3">
+    <form action="{% url 'add_to_favorites' %}" method="post" class="d-inline">
+        {% csrf_token %}
+        <!-- Прячем вопрос и ответ в форме, чтобы отправить их на сервер -->
+        <input type="hidden" name="question" value="{{ question }}">
+        <input type="hidden" name="answer" value="{{ answer }}">
+        <button type="submit" class="btn btn-warning">⭐ Добавить в избранное</button>
+    </form>
+    <a href="{% url 'questions_loading' %}" class="btn btn-secondary">Задать другой вопрос</a>
+</div>
+
 <a href="{% url 'questions' %}" class="btn btn-secondary mt-3">Задать другой вопрос</a>
 {% endblock %}

@@ -20,6 +20,9 @@
                             <a class="nav-link" href="{% url 'questions_loading' %}">Вопросы о важном</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="{% url 'favorites_list' %}">⭐ Избранное</a>
+                        </li>
+                        <li class="nav-item">
                             <form action="{% url 'logout' %}" method="post" class="d-inline">
                                 {% csrf_token %}
                                 <button type="submit" class="nav-link btn btn-link text-decoration-none">Выйти</button>

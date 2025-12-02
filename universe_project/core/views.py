@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from urllib.parse import unquote # для декодирования URL
 from .gemini_utils import generate_content
 from django.http import JsonResponse
+from .models import FavoriteAnswer
 
 # (здесь позже будет код для Gemini)
 
@@ -80,3 +81,45 @@ def answer_view(request):
         'answer': answer_text,
     }
     return render(request, 'answer.html', context)
+
+
+
+# VIEW ДЛЯ СТРАНИЦЫ С ИЗБРАННЫМ
+@login_required
+def favorites_list_view(request):
+    # Получаем все избранные ответы ТОЛЬКО для текущего пользователя
+    favorites = FavoriteAnswer.objects.filter(user=request.user)
+    return render(request, 'favorites.html', {'favorites': favorites})
+
+# VIEW ДЛЯ ДОБАВЛЕНИЯ В ИЗБРАННОЕ
+@login_required
+def add_to_favorites_view(request):
+    # Эта view должна принимать только POST-запросы
+    if request.method == 'POST':
+        question = request.POST.get('question')
+        answer = request.POST.get('answer')
+        
+        # Создаем и сохраняем новый объект в БД
+        if question and answer:
+            FavoriteAnswer.objects.create(
+                user=request.user,
+                question=question,
+                answer=answer
+            )
+        # После добавления перенаправляем пользователя на страницу с избранным
+        return redirect('favorites_list')
+    # Если это не POST-запрос, просто перенаправляем на главную
+    return redirect('home')
+
+# VIEW ДЛЯ УДАЛЕНИЯ ИЗ ИЗБРАННОГО
+@login_required
+def remove_from_favorites_view(request, pk):
+    # Находим объект по его ID (pk) или возвращаем ошибку 404
+    favorite = get_object_or_404(FavoriteAnswer, pk=pk)
+    
+    # Проверяем, что текущий пользователь является владельцем этого избранного
+    if favorite.user == request.user and request.method == 'POST':
+        favorite.delete()
+        return redirect('favorites_list')
+        
+    return redirect('favorites_list') # Или показать ошибку доступа
