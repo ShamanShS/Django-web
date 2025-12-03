@@ -5,7 +5,7 @@ from django.conf import settings
 
 genai.configure(api_key=settings.GEMINI_API_KEY)
 
-# Настройки для генерации
+
 generation_config = {
   "temperature": 1,
   "top_p": 1,
